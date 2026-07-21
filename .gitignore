@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.tts-cache/
+tmp/
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+*.log
+
+kazakh_ukrainian_offline_course.html
