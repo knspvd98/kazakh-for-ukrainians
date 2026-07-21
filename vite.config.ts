@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import { createTtsApiMiddleware } from "./server/ttsMiddleware.mjs";
 
 export default defineConfig({
-  base: "/courseforalina/",
+  base: process.env.RENDER ? "/" : "/courseforalina/",
   plugins: [
     react(),
     {
