@@ -9,7 +9,8 @@
     "preview": "vite preview --host 127.0.0.1",
     "serve": "node server/server.mjs",
     "start": "npm run build && npm run serve",
-    "qa": "tsx src/qa/runQualityChecks.ts"
+    "qa": "tsx src/qa/runQualityChecks.ts",
+    "audio:generate": "tsx scripts/generateStaticAudio.ts"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",
