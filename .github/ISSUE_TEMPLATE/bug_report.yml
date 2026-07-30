@@ -1,0 +1,43 @@
+name: Повідомити про помилку
+description: Помилка інтерфейсу, контенту, аудіо або прогресу
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Розділ
+      options:
+        - Урок
+        - Граматика
+        - Таблиці
+        - Словник
+        - Фразник
+        - Флешкартки
+        - Аудіо
+        - Прогрес
+        - Інше
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Що сталося?
+      description: Вкажіть урок, слово або фразу та опишіть фактичний результат.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Очікуваний результат
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Браузер і пристрій
+  - type: textarea
+    id: context
+    attributes:
+      label: Додатковий контекст або скриншот

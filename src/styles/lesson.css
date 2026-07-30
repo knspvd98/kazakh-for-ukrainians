@@ -1,4 +1,4 @@
-.lesson-main { width: 100%; padding: 28px clamp(24px, 3vw, 48px) 76px; background: var(--bg); }
+.lesson-main { width: 100%; min-width: 0; padding: 28px clamp(24px, 3vw, 48px) 76px; background: var(--bg); }
 .lesson-header { max-width: none; margin: 0 0 24px; }
 .lesson-header h1 { font-size: clamp(2rem, 2.8vw, 3.05rem); margin-bottom: 10px; }
 .breadcrumb { color: var(--muted); font-size: .9rem; margin-bottom: 8px; }
@@ -24,7 +24,7 @@
 .section-nav-list button { border: 0; border-left: 3px solid transparent; background: transparent; padding: 9px 10px; text-align: left; color: var(--muted); border-radius: 10px; line-height: 1.25; }
 .section-nav-list button.active { color: var(--primary-dark); background: var(--surface); border-left-color: var(--primary); box-shadow: none; }
 .section-nav-list span { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 8px; border-radius: 8px; background: var(--primary-soft); color: var(--primary); font-size: .8rem; font-weight: 800; }
-.lesson-reader { background: transparent; border: 0; border-radius: 0; padding: 0; box-shadow: none; }
+.lesson-reader { min-width: 0; background: transparent; border: 0; border-radius: 0; padding: 0; box-shadow: none; }
 .lesson-flow { display: block; }
 .reader-section {
   border-top: 1px solid rgba(95, 135, 141, .34);
@@ -429,7 +429,8 @@
   .lesson-main { padding: 24px 16px 48px; }
   .lesson-shell { grid-template-columns: 1fr; }
   .section-nav-list { position: static; }
-  .lesson-reader { padding: 22px; }
+  .lesson-reader { padding: 0; }
+  .reader-section { padding: 28px 0 34px; }
   .morpheme-detail, .example-grid, .lesson-word-grid { grid-template-columns: 1fr; }
   .lecture-compare, .lecture-mistake { grid-template-columns: 1fr; }
   .lecture-scheme { grid-template-columns: 1fr; gap: 10px; }

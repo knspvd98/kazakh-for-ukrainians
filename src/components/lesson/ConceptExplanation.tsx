@@ -162,7 +162,10 @@ function ConceptVisual({ visual }: { visual: NonNullable<Extract<LessonSection, 
         <div className="lesson-visual-stage">
           <div className="visual-example-block">
             <span className="visual-stage-kicker">Приклад у фокусі</span>
-            <strong lang="kk">{visual.example}</strong>
+            <span className="kazakh-audio-line">
+              <strong lang="kk">{visual.example}</strong>
+              {visual.example && isCompleteKazakhAudioText(visual.example) && <PronounceButton text={visual.example} compact />}
+            </span>
             <p>{visual.meaning}</p>
             {visual.contrast && (
               <div className="visual-contrast" aria-label={visual.contrast.label}>
@@ -236,16 +239,19 @@ function renderLectureBlock(block: LectureBlock, index: number) {
             <tbody>
               {block.rows.map((row, rowIndex) => (
                 <tr key={`${row.join("-")}-${rowIndex}`}>
-                  {row.map((cell, cellIndex) => (
+                  {row.map((cell, cellIndex) => {
+                    const hasAudio = isCompleteKazakhAudioText(cell);
+                    return (
                     <td key={`${cell}-${cellIndex}`}>
-                      {cellIndex === 0 ? (
+                      {hasAudio ? (
                         <span className="lecture-table-kazakh" lang="kk">
                           <span>{cell}</span>
-                          {isCompleteKazakhAudioText(cell) && <PronounceButton text={cell} compact />}
+                          <PronounceButton text={cell} compact />
                         </span>
                       ) : cell}
                     </td>
-                  ))}
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>

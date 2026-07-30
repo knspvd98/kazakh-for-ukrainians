@@ -69,7 +69,9 @@ function collectLectureTableCells(block: string) {
   const [, , , ...rows] = block.split("|");
 
   for (const row of rows) {
-    add(row.split("~")[0]);
+    for (const cell of row.split("~")) {
+      add(cell);
+    }
   }
 }
 
@@ -112,6 +114,8 @@ for (const lesson of lessons) {
     }
 
     if (section.kind === "concept") {
+      add(section.visual?.example);
+
       for (const step of section.visual?.teaching?.steps ?? []) {
         add(step.kk);
       }
@@ -199,6 +203,30 @@ const jobs = speedProfiles.flatMap((profile) =>
     text
   }))
 );
+
+if (process.argv.includes("--check")) {
+  const missing: string[] = [];
+
+  for (const job of jobs) {
+    const filename = `${hashText(job.text)}.mp3`;
+    const filePath = path.join(OUTPUT_DIR, job.profile.folder, filename);
+
+    if (!(await isValidAudioFile(filePath))) {
+      missing.push(`${job.profile.folder}: ${job.text}`);
+    }
+  }
+
+  console.log(`Аудіокорпус: ${orderedTexts.length} текстів, ${jobs.length} файлів.`);
+  console.log(`Відсутніх або пошкоджених файлів: ${missing.length}.`);
+
+  if (missing.length > 0) {
+    console.log("\nПерші пропуски:");
+    missing.slice(0, 20).forEach((item) => console.log(`- ${item}`));
+    process.exitCode = 1;
+  }
+
+  process.exit();
+}
 
 const configuredConcurrency = Number(process.env.AUDIO_CONCURRENCY ?? 2);
 

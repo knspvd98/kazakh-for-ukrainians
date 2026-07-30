@@ -8,6 +8,7 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const distDir = path.join(rootDir, "dist");
 const port = Number(process.env.PORT || 4173);
 const host = process.env.HOST || "0.0.0.0";
+const publicBase = normalizePublicBase(process.env.BASE_PATH || "/courseforalina/");
 const ttsMiddleware = createTtsApiMiddleware();
 
 const mimeTypes = {
@@ -38,7 +39,10 @@ server.listen(port, host, () => {
 
 async function serveStatic(req, res) {
   const pathname = new URL(req.url || "/", `http://${host}:${port}`).pathname;
-  const requested = pathname === "/" ? "/index.html" : pathname;
+  const appPath = pathname.startsWith(publicBase)
+    ? pathname.slice(publicBase.length - 1)
+    : pathname;
+  const requested = appPath === "/" ? "/index.html" : appPath;
   const safePath = path.normalize(decodeURIComponent(requested)).replace(/^(\.\.[/\\])+/, "");
   let filePath = path.join(distDir, safePath);
   if (!filePath.startsWith(distDir)) {
@@ -62,3 +66,7 @@ async function serveStatic(req, res) {
   }
 }
 
+function normalizePublicBase(value) {
+  const withLeadingSlash = value.startsWith("/") ? value : `/${value}`;
+  return withLeadingSlash.endsWith("/") ? withLeadingSlash : `${withLeadingSlash}/`;
+}

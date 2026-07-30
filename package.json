@@ -1,8 +1,22 @@
 {
   "name": "kazakh-ukrainian-course",
   "version": "1.0.0",
+  "description": "Інтерактивний курс казахської мови через українську з уроками, граматикою, словником, фразником та офлайн-аудіо.",
   "private": true,
   "type": "module",
+  "author": "knspvd98",
+  "license": "UNLICENSED",
+  "homepage": "https://knspvd98.github.io/courseforalina/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/knspvd98/courseforalina.git"
+  },
+  "bugs": {
+    "url": "https://github.com/knspvd98/courseforalina/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc && vite build",
@@ -10,7 +24,10 @@
     "serve": "node server/server.mjs",
     "start": "npm run build && npm run serve",
     "qa": "tsx src/qa/runQualityChecks.ts",
-    "audio:generate": "tsx scripts/generateStaticAudio.ts"
+    "audio:generate": "tsx scripts/generateStaticAudio.ts",
+    "audio:check": "tsx scripts/generateStaticAudio.ts --check",
+    "audio:estimate": "tsx scripts/estimateAudio.ts",
+    "check": "npm run qa && npm run audio:check && npm run build"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",

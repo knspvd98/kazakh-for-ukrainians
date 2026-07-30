@@ -1,8 +1,8 @@
 {
   "version": "v1",
   "voice": "kk-KZ-AigulNeural",
-  "texts": 1342,
-  "files": 2684,
+  "texts": 1564,
+  "files": 3128,
   "speeds": [
     {
       "folder": "normal",

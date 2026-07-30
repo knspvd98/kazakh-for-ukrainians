@@ -43,12 +43,15 @@ export function isCompleteKazakhAudioText(value: string) {
   const text = value.trim();
   if (!looksLikeKazakhText(text)) return false;
   if (/[їєґ]/i.test(text) || /[a-z]/i.test(text)) return false;
-  if (/[+|/→↔=\[\]{};]/.test(text) || /—/.test(text) || /[-–]/.test(text) || /\.{2,}|…/.test(text)) return false;
+  if (/[+|/→↔=≠·\[\]{};]/.test(text) || /—/.test(text) || /[-–]/.test(text) || /\.{2,}|…/.test(text)) return false;
   const commaSegments = text.split(",").map((segment) => segment.trim()).filter(Boolean);
   if (commaSegments.length > 2 && !/[.!?]$/.test(text)) return false;
   const normalized = text.toLowerCase().replace(/[.,!?;:()[\]«»“”"']/g, " ").trim();
   const tokens = normalized.split(/\s+/).filter(Boolean);
-  if (tokens.some((token) => ukrainianExplanationTokens.has(token))) return false;
+  // Some short forms are valid in both languages. For example, Kazakh не
+  // means "what", so a Ukrainian stop-word match must not hide audio for
+  // a phrase that otherwise contains recognised Kazakh words.
+  if (tokens.some((token) => ukrainianExplanationTokens.has(token) && !commonKazakhTokens.has(token))) return false;
   if (tokens.length === 1 && nonStandaloneMorphemes.has(tokens[0])) return false;
   return true;
 }
