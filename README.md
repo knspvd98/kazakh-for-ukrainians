@@ -1,55 +1,54 @@
 <p align="center">
-  <img src="./src/assets/home-course-hero.png" alt="Казахська через українську" width="100%" />
+  <img src="./src/assets/home-course-hero.png" alt="Kazakh through Ukrainian course preview" width="100%" />
 </p>
 
-# Казахська через українську
+# Kazakh through Ukrainian
 
-[![CI](https://github.com/knspvd98/courseforalina/actions/workflows/ci.yml/badge.svg)](https://github.com/knspvd98/courseforalina/actions/workflows/ci.yml)
-[![Deploy](https://github.com/knspvd98/courseforalina/actions/workflows/deploy.yml/badge.svg)](https://github.com/knspvd98/courseforalina/actions/workflows/deploy.yml)
+[![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fknspvd98.github.io%2Fcourseforalina%2F&label=GitHub%20Pages&logo=github)](https://knspvd98.github.io/courseforalina/)
 [![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-Інтерактивний курс казахської мови для україномовної учениці. Уроки поєднують докладні пояснення, живі казахські приклади, діалоги, граматичні таблиці, вправи з миттєвим зворотним зв’язком і попередньо згенероване аудіо.
+An interactive Kazakh language course designed for Ukrainian-speaking learners. It combines detailed Ukrainian explanations with practical Kazakh examples, dialogues, grammar references, instant-feedback exercises, flashcards, and pre-generated audio.
 
-**Онлайн-версія:** [knspvd98.github.io/courseforalina](https://knspvd98.github.io/courseforalina/)
+**Live course:** [knspvd98.github.io/courseforalina](https://knspvd98.github.io/courseforalina/)
 
-## Що входить до курсу
+## Course content
 
-| Розділ | Наповнення |
+| Area | Content |
 | --- | --- |
-| Курс / Сабақтар | 52 послідовні уроки від A0 до переходу A2/B1 |
-| Граматика / Грамматика | 35 докладних статей із таблицями, прикладами й типовими помилками |
-| Таблиці / Кестелер | 12 шпаргалок з варіантами закінчень |
-| Словник / Сөздік | 236 словникових форм із перекладами та прикладами |
-| Фразник / Сөйлеу үлгілері | 422 побутові репліки й діалогові опори |
-| Практика | 1082 перевірені інтерактивні завдання |
-| Аудіо / Дыбыс | понад 1500 унікальних казахських слів і реплік у звичайному та повільному темпі |
+| Course | 52 sequential lessons from A0 to the A2/B1 bridge |
+| Grammar | 35 detailed reference articles with tables, examples, and common mistakes |
+| Tables | 12 concise reference tables for suffix and ending patterns |
+| Vocabulary | 236 dictionary-form entries with Ukrainian translations and examples |
+| Phrasebook | 422 everyday phrases and reusable dialogue patterns |
+| Exercises | 1,082 reviewed interactive tasks |
+| Audio | More than 1,500 unique Kazakh words and phrases in normal and slow versions |
 
-## Основні можливості
+## Key features
 
-- один безперервний lesson-player без переходів у сторонні розділи під час уроку;
-- пояснення українською з великою кількістю казахського матеріалу;
-- вбудовані таблиці, схеми, морфемний розбір і тематичні ілюстрації;
-- вправи на розпізнавання, побудову, виправлення помилок і діалог;
-- окремі довідники граматики, закінчень, слів і фраз;
-- флешкартки з режимами повторення вивченого та самостійного навчання;
-- прогрес, складні слова й результати вправ у `localStorage`;
-- статичне офлайн-аудіо без браузерного синтезу мовлення;
-- адаптивний інтерфейс для desktop і mobile;
-- вбудований звіт якості даних.
+- A continuous lesson player that keeps explanations, examples, dialogues, and practice in one learning flow.
+- Detailed Ukrainian explanations supported by substantial Kazakh input.
+- Integrated grammar tables, morpheme breakdowns, visual explanations, and lesson-specific illustrations.
+- Exercises for recognition, sentence building, error correction, listening, and dialogue completion.
+- Dedicated grammar, ending-table, vocabulary, and phrasebook references.
+- Flashcard modes for reviewing completed material and studying vocabulary independently.
+- Local progress, difficult-word tracking, and exercise results stored in `localStorage`.
+- Pre-generated offline audio with no browser speech synthesis.
+- Responsive desktop and mobile layouts.
+- Built-in course data quality reporting.
 
-## Технології
+## Technology
 
 - React 19
-- TypeScript у strict-режимі
+- TypeScript in strict mode
 - Vite 6
 - Lucide React
-- локальні TypeScript-дані без backend
-- Edge TTS для попередньої генерації аудіофайлів
+- Local TypeScript datasets with no required backend
+- Edge TTS for pre-generating audio assets
 
-## Швидкий старт
+## Getting started
 
-Потрібні Node.js 20+ і npm 10+.
+Requirements: Node.js 20+ and npm 10+.
 
 ```bash
 git clone https://github.com/knspvd98/courseforalina.git
@@ -58,77 +57,81 @@ npm ci
 npm run dev
 ```
 
-Локальна адреса: `http://127.0.0.1:5173/courseforalina/`.
+The local development server is available at `http://127.0.0.1:5173/courseforalina/`.
 
-## Команди
+## Available commands
 
-| Команда | Призначення |
+| Command | Purpose |
 | --- | --- |
-| `npm run dev` | локальна розробка |
-| `npm run build` | TypeScript-перевірка та production build |
-| `npm run preview` | перегляд production build |
-| `npm run qa` | перевірка структури й якості навчальних даних |
-| `npm run audio:check` | перевірка наявності всіх потрібних MP3 |
-| `npm run audio:estimate` | оцінка обсягу аудіокорпусу |
-| `npm run audio:generate` | генерація відсутніх MP3 у двох темпах |
-| `npm run check` | повна релізна перевірка |
+| `npm run dev` | Start the local development server |
+| `npm run build` | Run TypeScript checks and create a production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run qa` | Validate the structure and quality of course data |
+| `npm run audio:check` | Verify that all required MP3 files exist and are valid |
+| `npm run audio:estimate` | Estimate the size of the audio corpus |
+| `npm run audio:generate` | Generate missing MP3 files at two speaking rates |
+| `npm run check` | Run the complete release validation |
 
-## Структура
+## Project structure
 
 ```text
 src/
-  app/          маршрути та кореневий застосунок
-  components/   lesson-player, практика, довідники, прогрес і QA
-  data/         уроки, граматика, таблиці, словник, фрази й вправи
-  styles/       дизайн-токени та стилі сторінок
-  types/        TypeScript-моделі курсу
-public/audio/   статичне аудіо у звичайному та повільному темпі
-scripts/        генерація й перевірка аудіокорпусу
-server/         опціональний Node-сервер і TTS endpoint
+  app/          Application entry point and routing
+  components/   Lesson player, exercises, references, progress, and QA
+  data/         Lessons, grammar, tables, vocabulary, phrases, and exercises
+  styles/       Design tokens and page-level styles
+  types/        TypeScript course models
+public/audio/   Static audio in normal and slow versions
+scripts/        Audio generation and corpus validation
+server/         Optional Node server and TTS endpoint
 ```
 
-## Аудіо
+## Audio
 
-Користувацький інтерфейс відтворює готові MP3 з `public/audio/v1`. Браузерний синтез мовлення не використовується. Кнопка аудіо з’являється лише біля повного казахського слова або репліки, а не біля окремого суфікса чи українського пояснення.
+The interface plays pre-generated MP3 files from `public/audio/v1`. Browser speech synthesis is not used. Audio controls are shown only for complete Kazakh words, sentences, and phrases, not for isolated suffixes or Ukrainian explanations.
 
-Генерація нових файлів:
+Generate and verify new audio files with:
 
 ```bash
 npm run audio:generate
 npm run audio:check
 ```
 
-Основний голос: `kk-KZ-AigulNeural`. Опціональний Node endpoint підтримує Edge TTS із файловим кешем і SpeechGen як резервний провайдер через змінні з `.env.example`. Секрети не потрапляють у frontend або Git.
+The primary voice is `kk-KZ-AigulNeural`. The optional Node endpoint supports Edge TTS with file caching and SpeechGen as a fallback provider. Configuration examples are documented in `.env.example`; secrets are never included in the frontend or committed to Git.
 
-## Контроль якості
+## Quality assurance
 
-`npm run qa` перевіряє кількість і повноту уроків, унікальність вправ і діалогів, словникові форми, переклади прикладів, двомовні назви таблиць, відсутність внутрішніх QA-полів у публічному контенті та коректність кандидатів для аудіо.
+`npm run qa` validates lesson completeness, exercise and dialogue uniqueness, dictionary forms, example translations, bilingual table titles, public-content safety, and audio eligibility.
 
-CI запускає:
+Continuous integration runs:
 
 ```bash
 npm ci
 npm run check
 ```
 
-## Розгортання
+## GitHub Pages deployment
 
-Після push у `main` workflow перевіряє застосунок, збирає `dist` і оновлює гілку `gh-pages`. Vite використовує базовий шлях `/courseforalina/`.
+The production site is hosted on **GitHub Pages** at:
 
-Для іншого шляху:
+**https://knspvd98.github.io/courseforalina/**
+
+The deployment workflow builds the application after changes reach `main` and publishes the generated `dist` directory to the `gh-pages` branch. Vite is configured with the repository base path `/courseforalina/`.
+
+To build for a different public path:
 
 ```bash
 BASE_PATH=/your-path/ npm run build
 ```
 
-## Збереження прогресу
+## Progress and privacy
 
-Прогрес зберігається тільки у браузері користувача через `localStorage`. Застосунок не надсилає результати навчання на зовнішній сервер.
+Learning progress is stored only in the learner's browser through `localStorage`. The application does not send lesson results to an external server.
 
-## Внесок у проєкт
+## Contributing
 
-Правила роботи з репозиторієм описані в [CONTRIBUTING.md](./CONTRIBUTING.md). Перед pull request потрібно виконати `npm run check`.
+Development guidelines are available in [CONTRIBUTING.md](./CONTRIBUTING.md). Run `npm run check` before opening a pull request.
 
-## Ліцензія
+## License
 
-Матеріали проєкту захищені авторським правом. Див. [LICENSE](./LICENSE).
+The project and its educational materials are protected by copyright. See [LICENSE](./LICENSE) for details.
