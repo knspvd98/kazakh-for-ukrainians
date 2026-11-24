@@ -5,7 +5,6 @@
 # Kazakh through Ukrainian
 
 [![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fknspvd98.github.io%2Fcourseforalina%2F&label=GitHub%20Pages&logo=github)](https://knspvd98.github.io/courseforalina/)
-[![CI](https://github.com/knspvd98/courseforalina/actions/workflows/ci.yml/badge.svg)](https://github.com/knspvd98/courseforalina/actions/workflows/ci.yml)
 [![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
