@@ -1,5 +1,6 @@
 import type { LessonSection, LessonVisual } from "../../types/course";
 import type { ReactElement } from "react";
+import { useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   Bike,
@@ -142,20 +143,33 @@ const visualIcons: Record<NonNullable<LessonVisual["objects"]>[number]["icon"], 
   lightbulb: Lightbulb
 };
 
-const lessonIllustrations = import.meta.glob("../../assets/lesson-*.png", {
-  eager: true,
+const lessonIllustrations = import.meta.glob("../../assets/lesson-*.webp", {
   import: "default"
-}) as Record<string, string>;
+}) as Record<string, () => Promise<string>>;
 
 function ConceptVisual({ visual }: { visual: NonNullable<Extract<LessonSection, { kind: "concept" }>["visual"]> }) {
   const objects = visual.objects ?? [];
-  const imageKey = `../../assets/lesson-${String(visual.lessonNumber).padStart(2, "0")}.png`;
-  const imageSource = lessonIllustrations[imageKey];
+  const imageKey = `../../assets/lesson-${String(visual.lessonNumber).padStart(2, "0")}.webp`;
+  const [loadedImage, setLoadedImage] = useState<{ key: string; source: string }>();
+  const imageSource = loadedImage?.key === imageKey ? loadedImage.source : undefined;
+
+  useEffect(() => {
+    const loadImage = lessonIllustrations[imageKey];
+    if (!loadImage) return;
+    let active = true;
+    void loadImage().then((source) => {
+      if (active) setLoadedImage({ key: imageKey, source });
+    });
+    return () => {
+      active = false;
+    };
+  }, [imageKey]);
+
   return (
     <>
       {imageSource && (
         <figure className="lesson-illustration">
-          <img src={imageSource} alt={visual.alt} />
+          <img src={imageSource} alt={visual.alt} loading="lazy" decoding="async" />
         </figure>
       )}
       <section className={`lesson-visual lesson-visual-${visual.scene ?? "language-map"}`} aria-label={visual.alt}>

@@ -27,7 +27,7 @@ export function AppShell({ route, setRoute, currentLesson, children }: { route: 
             <span>{courseSidebarOpen ? "Сховати зміст" : "Показати зміст"}</span>
           </button>
         )}
-        {showCourseSidebar && <CourseSidebar currentLesson={currentLesson} setRoute={setRoute} />}
+        {showCourseSidebar && <CourseSidebar key={currentLesson.blockId} currentLesson={currentLesson} setRoute={setRoute} />}
         {children}
       </div>
       <RightReferenceDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} lesson={currentLesson} />

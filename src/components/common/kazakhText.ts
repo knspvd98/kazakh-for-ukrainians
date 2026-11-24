@@ -43,7 +43,7 @@ export function isCompleteKazakhAudioText(value: string) {
   const text = value.trim();
   if (!looksLikeKazakhText(text)) return false;
   if (/[їєґ]/i.test(text) || /[a-z]/i.test(text)) return false;
-  if (/[+|/→↔=≠·\[\]{};]/.test(text) || /—/.test(text) || /[-–]/.test(text) || /\.{2,}|…/.test(text)) return false;
+  if (/[+|/→↔=≠·{};]/.test(text) || text.includes("[") || text.includes("]") || /—/.test(text) || /[-–]/.test(text) || /\.{2,}|…/.test(text)) return false;
   const commaSegments = text.split(",").map((segment) => segment.trim()).filter(Boolean);
   if (commaSegments.length > 2 && !/[.!?]$/.test(text)) return false;
   const normalized = text.toLowerCase().replace(/[.,!?;:()[\]«»“”"']/g, " ").trim();

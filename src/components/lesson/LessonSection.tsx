@@ -1,7 +1,6 @@
 import type { LessonSection as LessonSectionType } from "../../types/course";
 import { ConceptExplanation } from "./ConceptExplanation";
 import { MorphemeBreakdown } from "./MorphemeBreakdown";
-import { MorphemeBuilder } from "./MorphemeBuilder";
 import { DialogueBlock } from "./DialogueBlock";
 import { ExampleBlock } from "./ExampleBlock";
 import { PracticeBlock } from "./PracticeBlock";

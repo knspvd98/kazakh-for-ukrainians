@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { Exercise } from "../../types/exercises";
 
 export function BuildSentenceTask({ task, onAnswer }: { task: Exercise; onAnswer: (id: string, ok: boolean) => void }) {
   const answer = Array.isArray(task.answer) ? task.answer : String(task.answer ?? "").split(" + ");
-  const pool = useMemo(() => makeBlockPool(task, answer), [task.id]);
+  const pool = makeBlockPool(task, answer);
   const [built, setBuilt] = useState<{ value: string; index: number }[]>([]);
   const [checked, setChecked] = useState(false);
   const builtValues = built.map((item) => item.value);

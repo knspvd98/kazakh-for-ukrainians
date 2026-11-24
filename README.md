@@ -1,10 +1,11 @@
 <p align="center">
-  <img src="./src/assets/home-course-hero.png" alt="Kazakh through Ukrainian course preview" width="100%" />
+  <img src="./src/assets/home-course-hero.webp" alt="Kazakh through Ukrainian course preview" width="100%" />
 </p>
 
 # Kazakh through Ukrainian
 
 [![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fknspvd98.github.io%2Fcourseforalina%2F&label=GitHub%20Pages&logo=github)](https://knspvd98.github.io/courseforalina/)
+[![CI](https://github.com/knspvd98/courseforalina/actions/workflows/ci.yml/badge.svg)](https://github.com/knspvd98/courseforalina/actions/workflows/ci.yml)
 [![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
@@ -45,6 +46,8 @@ An interactive Kazakh language course designed for Ukrainian-speaking learners. 
 - Lucide React
 - Local TypeScript datasets with no required backend
 - Edge TTS for pre-generating audio assets
+- Vitest and Testing Library for unit and component tests
+- ESLint with TypeScript and React Hooks rules
 
 ## Getting started
 
@@ -66,6 +69,8 @@ The local development server is available at `http://127.0.0.1:5173/courseforali
 | `npm run dev` | Start the local development server |
 | `npm run build` | Run TypeScript checks and create a production build |
 | `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run strict TypeScript and React linting |
+| `npm run test` | Run unit and component tests |
 | `npm run qa` | Validate the structure and quality of course data |
 | `npm run audio:check` | Verify that all required MP3 files exist and are valid |
 | `npm run audio:estimate` | Estimate the size of the audio corpus |
@@ -101,7 +106,11 @@ The primary voice is `kk-KZ-AigulNeural`. The optional Node endpoint supports Ed
 
 ## Quality assurance
 
-`npm run qa` validates lesson completeness, exercise and dialogue uniqueness, dictionary forms, example translations, bilingual table titles, public-content safety, and audio eligibility.
+`npm run qa` validates lesson completeness, exercise and dialogue uniqueness,
+dictionary forms, example translations, bilingual table titles, public-content
+safety, and audio eligibility. Unit tests cover text classification, persistent
+audio settings, and interactive exercise behaviour. ESLint checks TypeScript,
+React Hooks, and stale code.
 
 Continuous integration runs:
 
@@ -109,6 +118,10 @@ Continuous integration runs:
 npm ci
 npm run check
 ```
+
+The production build uses WebP illustrations, lazy lesson-image loading, and
+separate vendor, lesson, practice, and reference chunks. This keeps the full
+visual asset set compact without removing offline course content.
 
 ## GitHub Pages deployment
 

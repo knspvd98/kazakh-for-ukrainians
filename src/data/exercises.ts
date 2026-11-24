@@ -327,7 +327,7 @@ const contextualBanks: Record<string, TaskSeed[]> = {
   ]
 };
 
-function selectBank(family: string, lessonNumber: number): TaskSeed[] {
+function selectBank(family: string): TaskSeed[] {
   if (["cafe", "shop", "transport", "city", "home", "family", "study", "work", "time", "weather", "health", "finalreview"].includes(family)) return [];
   if (family === "morpheme") return banks.morpheme;
   if (family === "longword") return banks.longword;
@@ -528,7 +528,7 @@ function authoredLessonPractice(family: string): TaskSeed[] {
 
 function seedsForLesson(lessonNumber: number, family: string): TaskSeed[] {
   const seen = new Set<string>();
-  const candidates = [...selectBank(family, lessonNumber), ...contextualFor(family), ...authoredLessonPractice(family)];
+  const candidates = [...selectBank(family), ...contextualFor(family), ...authoredLessonPractice(family)];
   const unique = candidates.filter((seed) => {
     if (seed.options) {
       const normalized = seed.options.map((option) => option.toLocaleLowerCase("uk").replace(/[.!?]+$/g, "").replace(/\s+/g, " ").trim());
@@ -553,7 +553,7 @@ function scrambledBlocks(blocks: string[] | undefined, lessonNumber: number, ind
   return rotated.join("\u0000") === copy.join("\u0000") ? [...copy].reverse() : rotated;
 }
 
-function typeForSeed(seed: TaskSeed, index: number): Exercise["type"] {
+function typeForSeed(seed: TaskSeed): Exercise["type"] {
   if (seed.pairs) return "matchPairs";
   if (seed.blocks) return /порядок|Збери|Склади/.test(seed.prompt) ? "buildSentence" : "orderParts";
   if (/Виправ/.test(seed.prompt)) return "correctMistake";
@@ -595,7 +595,7 @@ function reviewedTask(lessonNumber: number, family: string, index: number): Exer
   const lessonId = "lesson-" + lessonNumber;
   const bank = seedsForLesson(lessonNumber, family);
   const seed = bank[index];
-  const type = typeForSeed(seed, index);
+  const type = typeForSeed(seed);
   return {
     id: `${lessonId}-task-${String(index + 1).padStart(2, "0")}`,
     lessonId,

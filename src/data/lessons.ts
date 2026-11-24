@@ -3309,11 +3309,15 @@ function deepenedBody(number: number, family: string, body: string[]) {
     ...(lectureExpansionByLessonC[number] ?? []),
     ...(lectureExpansionByLessonD[number] ?? [])
   ];
+  const topicPractice = topicPracticeDepth[family] ?? [];
+  const topicUseCase = topicUseCaseDepth[family] ? [topicUseCaseDepth[family]] : [];
   if (number === 1) {
     return dedupeLectureBody([
       ...body,
       ...lectureFrame.slice(0, 3),
       ...(topicDeepening[family] ?? []),
+      ...topicPractice,
+      ...topicUseCase,
       lectureFrame[3],
       ...(lectureExpansionByFamily[family] ?? []),
       ...(lessonAuditExpansion[number] ?? []),
@@ -3328,6 +3332,8 @@ function deepenedBody(number: number, family: string, body: string[]) {
     ...lectureFrame.slice(0, 3),
     ...coreDepth,
     ...(topicDeepening[family] ?? []),
+    ...topicPractice,
+    ...topicUseCase,
     lectureFrame[3],
     ...workedDepth,
     ...(lectureExpansionByFamily[family] ?? []),
@@ -4921,11 +4927,9 @@ function dialogueForLesson(number: number, fallback?: DialogueLine[]) {
   return dialogue;
 }
 
-function lessonCopy(number: number, title: string, subtitle: string, family: string, examples: ReturnType<typeof makeExample>[]): AuthoredLessonCopy {
+function lessonCopy(number: number, title: string, family: string): AuthoredLessonCopy {
   const authored = authoredLessonCopy[number];
   if (authored) return { ...authored, body: deepenedBody(number, family, authored.body), dialogue: dialogueForLesson(number, authored.dialogue), wordEstimate: authored.wordEstimate ?? 2600 };
-  const firstExample = examples[0] ?? makeExample("Бұл мысал.", "Це приклад.");
-  const secondExample = examples[1] ?? firstExample;
   const topic = topicCopy[family];
   if (topic) {
     const dialogue = dialogueForLesson(number, topic.dialogue ?? topicDialogues[family]);
@@ -5205,7 +5209,7 @@ function buildSections(number: number, title: string, subtitle: string, family: 
   const manual = manualOpeningSections(number, title, subtitle, grammarLinks, tableLinks, vocabIds, exerciseIds);
   if (manual) return manual;
   const examples = examplesForLesson(number, family);
-  const copy = lessonCopy(number, title, subtitle, family, examples);
+  const copy = lessonCopy(number, title, family);
   const labels = sectionLabels(title);
   const model = modelForLesson(number, family);
   return [
@@ -5230,8 +5234,7 @@ export const lessons: Lesson[] = lessonPlan.map(([blockId, number, title, subtit
   const vocabularyIds = lessonVocabulary(number, family);
   const phraseIds = phrases.filter(phrase => phrase.lessonIds.includes(id)).slice(0, 20).map(phrase => phrase.id);
   const exerciseIds = (exercisesByLesson[id] ?? []).map(exercise => exercise.id);
-  const sampleExamples = examplesForLesson(number, family);
-  const copy = lessonCopy(number, title, subtitle, family, sampleExamples);
+  const copy = lessonCopy(number, title, family);
   return {
     id,
     number,

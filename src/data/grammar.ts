@@ -1,6 +1,5 @@
 import type { GrammarArticle } from "../types/grammar";
 import { makeExample } from "./helpers";
-import { lessonPlan } from "./courseStructure";
 
 const articleSeeds = [
   ["g-alphabet", "Алфавіт і звуки / Әліпби", "Алфавіт і звуки", "A0", "літера → звук → слово", 3],

@@ -2,14 +2,10 @@ import { AppRoute } from "../../app/routes";
 import { courseBlocks } from "../../data/courseStructure";
 import { lessons } from "../../data/lessons";
 import type { Lesson } from "../../types/course";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function CourseSidebar({ currentLesson, setRoute }: { currentLesson: Lesson; setRoute: (route: AppRoute) => void }) {
   const [expandedBlock, setExpandedBlock] = useState(currentLesson.blockId);
-
-  useEffect(() => {
-    setExpandedBlock(currentLesson.blockId);
-  }, [currentLesson.blockId]);
 
   return (
     <aside className="course-sidebar">

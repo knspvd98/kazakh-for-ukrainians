@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppRoute } from "./routes";
 import { AppShell } from "../components/layout/AppShell";
 import { LessonPlayer } from "../components/lesson/LessonPlayer";
@@ -15,10 +15,9 @@ import { exercises } from "../data/exercises";
 import { vocabulary } from "../data/vocabulary";
 import { phrases } from "../data/phrases";
 import { grammarArticles } from "../data/grammar";
-import { endingTables } from "../data/endingTables";
 import { useProgress } from "../components/progress/useProgress";
 import { PronounceButton } from "../components/common/PronounceButton";
-import homeCourseHero from "../assets/home-course-hero.png";
+import homeCourseHero from "../assets/home-course-hero.webp";
 
 export function App() {
   const [route, setRoute] = useState<AppRoute>({ view: "home" });
@@ -38,7 +37,7 @@ export function App() {
       {route.view === "tables" && <EndingTablesPage selectedId={route.tableId} />}
       {route.view === "vocabulary" && <VocabularyPage selectedId={route.wordId} setRoute={setRoute} />}
       {route.view === "phrases" && <PhrasebookPage category={route.phraseCategory} />}
-      {route.view === "practice" && <FlashcardsPage progress={progress} selectedWordId={route.flashcardWordId} />}
+      {route.view === "practice" && <FlashcardsPage key={route.flashcardWordId ?? "practice"} progress={progress} selectedWordId={route.flashcardWordId} />}
       {route.view === "audio" && <AudioSettingsPage />}
       {route.view === "progress" && <ProgressPage progress={progress} />}
       {route.view === "qa" && <DataQualityPage />}
@@ -53,7 +52,14 @@ function HomePage({ setRoute, progress }: { setRoute: (route: AppRoute) => void;
   return (
     <main className="page home-page">
       <header className="home-course-hero">
-        <img src={homeCourseHero} alt="Діас і Аліна в навчальному світі конструктора між Казахстаном і Україною" />
+        <img
+          src={homeCourseHero}
+          alt="Діас і Аліна в навчальному світі конструктора між Казахстаном і Україною"
+          width="1774"
+          height="887"
+          decoding="async"
+          fetchPriority="high"
+        />
         <div className="home-hero-copy">
           <span className="kicker">Қазақ тілі · українською</span>
           <h1>Казахська через українську</h1>
@@ -157,9 +163,13 @@ function CoursePage({ setRoute, selectedBlockId }: { setRoute: (route: AppRoute)
 }
 
 function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typeof useProgress>; selectedWordId?: string }) {
-  const [mode, setMode] = useState<"review" | "self">("review");
-  const [theme, setTheme] = useState("Усі теми");
-  const [level, setLevel] = useState("Усі рівні");
+  const { answerTask } = progress;
+  const initialSelectedWord = selectedWordId
+    ? vocabulary.find((entry) => entry.id === selectedWordId)
+    : undefined;
+  const [mode, setMode] = useState<"review" | "self">(initialSelectedWord ? "self" : "review");
+  const [theme, setTheme] = useState(initialSelectedWord?.theme ?? "Усі теми");
+  const [level, setLevel] = useState(initialSelectedWord?.level ?? "Усі рівні");
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [shuffleSeed, setShuffleSeed] = useState(0);
@@ -199,28 +209,16 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
     localStorage.setItem("kazakh-course-hard-words", JSON.stringify(hardIds));
   }, [hardIds]);
 
-  useEffect(() => {
-    if (!selectedWordId) return;
-    const selectedIndex = vocabulary.findIndex((entry) => entry.id === selectedWordId);
-    if (selectedIndex < 0) return;
-    const selected = vocabulary[selectedIndex];
-    setMode("self");
-    setTheme(selected.theme);
-    setLevel(selected.level);
-    setIndex(0);
-    setFlipped(false);
-  }, [selectedWordId]);
-
   function resetSession() {
     setSessionStats({ again: 0, hard: 0, good: 0, easy: 0 });
     setIndex(0);
     setFlipped(false);
   }
 
-  function grade(result: "again" | "hard" | "good" | "easy") {
+  const grade = useCallback((result: "again" | "hard" | "good" | "easy") => {
     if (!card) return;
     const ok = result === "good" || result === "easy";
-    progress.answerTask(`flashcard-${card.id}`, ok);
+    answerTask(`flashcard-${card.id}`, ok);
     setSessionStats((stats) => ({ ...stats, [result]: stats[result] + 1 }));
     setHardIds((ids) => {
       const set = new Set(ids);
@@ -230,7 +228,7 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
     });
     setFlipped(false);
     setIndex((value) => (value + 1) % Math.max(1, deck.length));
-  }
+  }, [answerTask, card, deck.length]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -247,7 +245,7 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [flipped, card?.id, deck.length]);
+  }, [flipped, grade]);
 
   return (
     <main className="page flashcards-page">
