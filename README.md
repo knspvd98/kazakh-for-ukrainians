@@ -128,7 +128,7 @@ The production site is hosted on **GitHub Pages** at:
 
 **https://knspvd98.github.io/kazakh-for-ukrainians/**
 
-The deployment workflow builds the application after changes reach `main` and publishes the generated `dist` directory to the `gh-pages` branch. Vite is configured with the repository base path `/kazakh-for-ukrainians/`.
+Changes to `main` pass the release checks before GitHub Pages publishes the verified build. The same checks run on pull requests. Vite is configured with the repository base path `/kazakh-for-ukrainians/`.
 
 To build for a different public path:
 
