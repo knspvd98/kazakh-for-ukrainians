@@ -318,3 +318,7 @@
     transition-duration: .01ms !important;
   }
 }
+
+.topbar .brand {background:transparent;border:0;text-align:left;font:inherit;padding:0}
+.topnav .reference-select {align-self:center;min-width:0;max-width:155px;font:inherit;font-weight:600;color:#eff5f7;border:1px solid #708693;border-radius:4px;background:#193544;padding:6px}
+@media(max-width:700px){.topnav{flex-wrap:wrap;gap:2px}.topnav button{padding:5px 9px;min-height:36px}.topnav .reference-select{max-width:130px}}

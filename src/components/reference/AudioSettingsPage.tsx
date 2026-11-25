@@ -1,3 +1,4 @@
+import { OfflineAudio } from "./OfflineAudio";
 import { useState } from "react";
 
 import {
@@ -176,6 +177,7 @@ export function AudioSettingsPage() {
           </p>
         )}
       </section>
+    <OfflineAudio />
     </main>
   );
 }

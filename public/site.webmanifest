@@ -2,9 +2,18 @@
   "name": "Казахська через українську",
   "short_name": "Қазақ тілі",
   "description": "Інтерактивний курс казахської мови через українську.",
-  "start_url": "/kazakh-for-ukrainians/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f5f8fa",
   "theme_color": "#10283f",
-  "lang": "uk"
+  "lang": "uk",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }

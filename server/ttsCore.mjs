@@ -145,7 +145,10 @@ async function synthesizeWithSpeechGen({ text, rate }) {
   if (result?.status !== 1) throw new Error(String(result?.error || "SpeechGen не повернув аудіофайл."));
   const fileUrl = result.file_cors || result.file;
   if (!fileUrl) throw new Error("SpeechGen не повернув URL аудіофайлу.");
-  const audioResponse = await fetch(fileUrl);
+  const download=new URL(fileUrl);
+  if(download.protocol!=="https:" || download.username || download.password || download.port ||
+     !(download.hostname==="speechgen.io" || download.hostname.endsWith(".speechgen.io"))) throw new Error("Unapproved audio host.");
+  const audioResponse = await fetch(download, {redirect:"error",signal:AbortSignal.timeout(20000)});
   if (!audioResponse.ok) throw new Error(`не вдалося завантажити аудіо: HTTP ${audioResponse.status}`);
   const audio = Buffer.from(await audioResponse.arrayBuffer());
   if (audio.length < 1000) throw new Error("SpeechGen повернув занадто малий аудіофайл.");

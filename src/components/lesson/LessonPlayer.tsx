@@ -14,9 +14,16 @@ export function LessonPlayer({ lesson, setRoute, progress }: { lesson: Lesson; s
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [lesson.id]);
 
-  function finish(goNext: boolean) {
+  const read = progress.state.completedSections[lesson.id] ?? [];
+  const required = lesson.sections.filter(part => part.kind === "concept" || part.kind === "model");
+  const tasks = [...new Set(lesson.sections.flatMap(part => "exerciseIds" in part ? part.exerciseIds : []))];
+  const answered = tasks.filter(id=>id in progress.state.taskResults).length;
+  const correct = tasks.filter(id=>progress.state.taskResults[id] === true).length;
+  const ready = required.every(part=>read.includes(part.id)) && answered===tasks.length && correct>=Math.ceil(tasks.length*.8);
+  function finish() {
+    if (!ready) return;
     progress.completeLesson(lesson.id);
-    if (goNext && nextLesson) setRoute({ view: "lesson", lessonId: nextLesson.id });
+    if (nextLesson) setRoute({ view: "lesson", lessonId: nextLesson.id });
     else setRoute({ view: "course" });
   }
 
@@ -30,11 +37,15 @@ export function LessonPlayer({ lesson, setRoute, progress }: { lesson: Lesson; s
       </div>
       <article className="lesson-reader lesson-flow">
         {lesson.sections.map((section) => (
-          <LessonSection key={section.id} section={section} progress={progress} />
+          <div key={section.id}><LessonSection section={section} progress={progress} />
+            {required.some(part=>part.id===section.id) && <button className="secondary" disabled={read.includes(section.id)}
+              onClick={()=>progress.markSection(lesson.id,section.id)}>{read.includes(section.id)?"Прочитано":"Позначити цей розділ прочитаним"}</button>}
+          </div>
         ))}
+        <p role="status">Прочитано розділів: {required.filter(part=>read.includes(part.id)).length}/{required.length}. Виконано завдань: {answered}/{tasks.length}. Правильних відповідей: {correct}. Для завершення прочитай основні розділи, виконай усі завдання й дай щонайменше {Math.ceil(tasks.length*.8)} правильних відповідей. Можна повторити окреме завдання.</p>
         <div className="lesson-controls">
-          <button className="secondary" onClick={() => finish(false)}>До курсу</button>
-          <button className="primary" onClick={() => finish(true)}>{nextLesson ? "Наступний урок" : "Завершити курс"}</button>
+          <button className="secondary" onClick={() => setRoute({view:"course"})}>До курсу</button>
+          <button className="primary" disabled={!ready} onClick={finish}>{nextLesson ? "Наступний урок" : "Завершити курс"}</button>
         </div>
       </article>
     </main>

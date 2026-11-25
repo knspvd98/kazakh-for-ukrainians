@@ -6,6 +6,7 @@ export type AppView =
   | "tables"
   | "vocabulary"
   | "phrases"
+  | "workshop"
   | "practice"
   | "audio"
   | "progress"
@@ -29,6 +30,7 @@ export const navItems: { view: AppView; label: string }[] = [
   { view: "tables", label: "Таблиці / Кестелер" },
   { view: "vocabulary", label: "Словник" },
   { view: "phrases", label: "Фрази" },
+  { view: "workshop", label: "Майстерня" },
   { view: "practice", label: "Картки" },
   { view: "audio", label: "Аудіо / Дыбыс" },
   { view: "progress", label: "Прогрес" },
