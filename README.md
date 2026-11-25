@@ -128,7 +128,7 @@ The production site is hosted on **GitHub Pages** at:
 
 **https://knspvd98.github.io/kazakh-for-ukrainians/**
 
-Changes to `main` pass the release checks before GitHub Pages publishes the verified build. The same checks run on pull requests. Vite is configured with the repository base path `/kazakh-for-ukrainians/`.
+Changes to `main` pass the release checks before GitHub Pages publishes the verified build. The same checks run on pull requests. Before uploading, a browser reviews a card, reloads its schedule and restores a progress backup in a fresh session. To run this check locally, build the course, install Chromium with `npx playwright install chromium`, then run `npm run test:browser`. Vite is configured with the repository base path `/kazakh-for-ukrainians/`.
 
 To build for a different public path:
 
