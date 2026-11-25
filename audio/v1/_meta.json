@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "voice": "kk-KZ-AigulNeural",
+  "texts": 1564,
+  "files": 3128,
+  "speeds": [
+    {
+      "folder": "normal",
+      "rate": 1
+    },
+    {
+      "folder": "slow",
+      "rate": 0.85
+    }
+  ]
+}
