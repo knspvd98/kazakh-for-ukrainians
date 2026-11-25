@@ -1,7 +1,7 @@
 {
   "name": "kazakh-ukrainian-course",
   "version": "1.0.0",
-  "description": "Інтерактивний курс казахської мови через українську з уроками, граматикою, словником, фразником та офлайн-аудіо.",
+  "description": "An interactive Kazakh course for Ukrainian speakers with lessons, grammar, spaced practice and offline audio.",
   "private": true,
   "type": "module",
   "author": "Dias Konyspayev",
