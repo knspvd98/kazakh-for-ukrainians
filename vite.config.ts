@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  base: process.env.BASE_PATH || "/courseforalina/",
+  base: process.env.BASE_PATH || "/kazakh-for-ukrainians/",
   plugins: [react()],
   build: {
     target: "es2020",

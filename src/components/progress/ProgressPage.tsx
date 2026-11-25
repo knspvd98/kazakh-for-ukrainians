@@ -15,7 +15,7 @@ export function ProgressPage({ progress }: { progress: ProgressApi }) {
     if (!file) return;
     try {
       await progress.importProgress(file);
-      setMessage("Прогрес імпортовано. Дані збережено в цьому браузері.");
+      setMessage("Прогрес імпортовано.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Не вдалося імпортувати прогрес.");
     }
