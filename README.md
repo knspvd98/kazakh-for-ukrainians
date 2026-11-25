@@ -4,13 +4,13 @@
 
 # Kazakh through Ukrainian
 
-[![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fknspvd98.github.io%2Fcourseforalina%2F&label=GitHub%20Pages&logo=github)](https://knspvd98.github.io/courseforalina/)
+[![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fknspvd98.github.io%2Fkazakh-for-ukrainians%2F&label=GitHub%20Pages&logo=github)](https://knspvd98.github.io/kazakh-for-ukrainians/)
 [![React](https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 An interactive Kazakh language course designed for Ukrainian-speaking learners. It combines detailed Ukrainian explanations with practical Kazakh examples, dialogues, grammar references, instant-feedback exercises, flashcards, and pre-generated audio.
 
-**Live course:** [knspvd98.github.io/courseforalina](https://knspvd98.github.io/courseforalina/)
+**Live course:** [knspvd98.github.io/kazakh-for-ukrainians](https://knspvd98.github.io/kazakh-for-ukrainians/)
 
 ## Course content
 
@@ -53,13 +53,13 @@ An interactive Kazakh language course designed for Ukrainian-speaking learners. 
 Requirements: Node.js 20+ and npm 10+.
 
 ```bash
-git clone https://github.com/knspvd98/courseforalina.git
-cd courseforalina
+git clone https://github.com/knspvd98/kazakh-for-ukrainians.git
+cd kazakh-for-ukrainians
 npm ci
 npm run dev
 ```
 
-The local development server is available at `http://127.0.0.1:5173/courseforalina/`.
+The local development server is available at `http://127.0.0.1:5173/kazakh-for-ukrainians/`.
 
 ## Available commands
 
@@ -126,9 +126,9 @@ visual asset set compact without removing offline course content.
 
 The production site is hosted on **GitHub Pages** at:
 
-**https://knspvd98.github.io/courseforalina/**
+**https://knspvd98.github.io/kazakh-for-ukrainians/**
 
-The deployment workflow builds the application after changes reach `main` and publishes the generated `dist` directory to the `gh-pages` branch. Vite is configured with the repository base path `/courseforalina/`.
+The deployment workflow builds the application after changes reach `main` and publishes the generated `dist` directory to the `gh-pages` branch. Vite is configured with the repository base path `/kazakh-for-ukrainians/`.
 
 To build for a different public path:
 

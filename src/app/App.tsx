@@ -30,6 +30,7 @@ export function App() {
 
   return (
     <AppShell route={route} setRoute={setRoute} currentLesson={currentLesson}>
+      {progress.storageError && <p role="alert">Браузер не зберіг останні зміни. Експортуй прогрес перед закриттям сторінки.</p>}
       {route.view === "home" && <HomePage setRoute={setRoute} progress={progress} />}
       {route.view === "course" && <CoursePage setRoute={setRoute} selectedBlockId={route.courseBlockId} />}
       {route.view === "lesson" && <LessonPlayer lesson={currentLesson} setRoute={setRoute} progress={progress} />}
@@ -163,7 +164,7 @@ function CoursePage({ setRoute, selectedBlockId }: { setRoute: (route: AppRoute)
 }
 
 function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typeof useProgress>; selectedWordId?: string }) {
-  const { answerTask } = progress;
+  const { gradeCard } = progress;
   const initialSelectedWord = selectedWordId
     ? vocabulary.find((entry) => entry.id === selectedWordId)
     : undefined;
@@ -175,7 +176,7 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
   const [shuffleSeed, setShuffleSeed] = useState(0);
   const [reverse, setReverse] = useState(false);
   const [hardIds, setHardIds] = useState<string[]>(() => {
-    try { return JSON.parse(localStorage.getItem("kazakh-course-hard-words") ?? "[]") as string[]; }
+    try { const saved: unknown = JSON.parse(localStorage.getItem("kazakh-course-hard-words") ?? "[]"); return Array.isArray(saved) ? saved.filter((v): v is string => typeof v === "string") : []; }
     catch { return []; }
   });
   const [showHardOnly, setShowHardOnly] = useState(false);
@@ -193,20 +194,29 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
       if (b.id === selectedWordId) return 1;
       return a.kk.localeCompare(b.kk, "kk");
     });
-  const baseDeck = mode === "review" ? reviewWords : selfWords;
+  const [reviewTime, setReviewTime] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = window.setInterval(() => setReviewTime(Date.now()), 60000);
+    return () => window.clearInterval(timer);
+  }, []);
+  const dueWords = reviewWords.filter(word => {
+    const stat = progress.state.reviewStats[word.id];
+    return !stat || Date.parse(stat.due) <= reviewTime;
+  });
+  const baseDeck = mode === "review" ? dueWords : selfWords;
   const filteredDeck = showHardOnly ? baseDeck.filter((entry) => hardIds.includes(entry.id)) : baseDeck;
   const deck = useMemo(() => {
-    const source = filteredDeck.length ? filteredDeck : baseDeck;
+    const source = filteredDeck;
     if (!shuffleSeed) return source;
     return [...source].sort((a, b) => hashFlashcard(a.id, shuffleSeed) - hashFlashcard(b.id, shuffleSeed));
-  }, [baseDeck, filteredDeck, shuffleSeed]);
+  }, [filteredDeck, shuffleSeed]);
   const card = deck[index % Math.max(1, deck.length)];
   const sessionTotal = sessionStats.again + sessionStats.hard + sessionStats.good + sessionStats.easy;
   const frontText = card ? (reverse ? card.uk : card.kk) : "";
   const backMain = card ? (reverse ? card.kk : card.uk) : "";
 
   useEffect(() => {
-    localStorage.setItem("kazakh-course-hard-words", JSON.stringify(hardIds));
+    try { localStorage.setItem("kazakh-course-hard-words", JSON.stringify(hardIds)); } catch { /* Available for this session. */ }
   }, [hardIds]);
 
   function resetSession() {
@@ -217,8 +227,7 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
 
   const grade = useCallback((result: "again" | "hard" | "good" | "easy") => {
     if (!card) return;
-    const ok = result === "good" || result === "easy";
-    answerTask(`flashcard-${card.id}`, ok);
+    gradeCard(card.id, result);
     setSessionStats((stats) => ({ ...stats, [result]: stats[result] + 1 }));
     setHardIds((ids) => {
       const set = new Set(ids);
@@ -227,8 +236,8 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
       return [...set];
     });
     setFlipped(false);
-    setIndex((value) => (value + 1) % Math.max(1, deck.length));
-  }, [answerTask, card, deck.length]);
+    setIndex((value) => mode === "review" ? 0 : (value + 1) % Math.max(1, deck.length));
+  }, [gradeCard, card, deck.length, mode]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -307,7 +316,7 @@ function FlashcardsPage({ progress, selectedWordId }: { progress: ReturnType<typ
             <button className="text-button" onClick={resetSession}>Скинути сесію</button>
           </section>
         ) : (
-          <section className="empty-state"><h2>Немає слів для цього набору</h2><p>Заверши урок або зміни фільтри самостійного навчання.</p></section>
+          <section className="empty-state"><h2>Немає слів для цього набору</h2><p>Повернися до повторення пізніше або обери слова у вільній практиці.</p></section>
         )}
       </div>
     </main>

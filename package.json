@@ -6,13 +6,13 @@
   "type": "module",
   "author": "Dias Konyspayev",
   "license": "UNLICENSED",
-  "homepage": "https://knspvd98.github.io/courseforalina/",
+  "homepage": "https://knspvd98.github.io/kazakh-for-ukrainians/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/knspvd98/courseforalina.git"
+    "url": "https://github.com/knspvd98/kazakh-for-ukrainians.git"
   },
   "bugs": {
-    "url": "https://github.com/knspvd98/courseforalina/issues"
+    "url": "https://github.com/knspvd98/kazakh-for-ukrainians/issues"
   },
   "engines": {
     "node": ">=20.19.0"

@@ -8,7 +8,7 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const distDir = path.join(rootDir, "dist");
 const port = Number(process.env.PORT || 4173);
 const host = process.env.HOST || "0.0.0.0";
-const publicBase = normalizePublicBase(process.env.BASE_PATH || "/courseforalina/");
+const publicBase = normalizePublicBase(process.env.BASE_PATH || "/kazakh-for-ukrainians/");
 const ttsMiddleware = createTtsApiMiddleware();
 
 const mimeTypes = {

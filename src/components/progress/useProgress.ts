@@ -21,31 +21,74 @@ const initialState: ProgressState = {
 function loadState(): ProgressState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? { ...initialState, ...JSON.parse(raw) } : initialState;
+    return raw ? normalizeImportedState(JSON.parse(raw)) : initialState;
   } catch {
     return initialState;
   }
 }
 
-function normalizeImportedState(value: unknown): ProgressState {
-  if (!value || typeof value !== "object") {
+type Review = ProgressState["reviewStats"][string];
+
+function record(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function strings(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every(item => typeof item === "string");
+}
+
+function count(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
+function review(value: unknown): value is Review {
+  return record(value) && count(value.correct) && count(value.wrong) &&
+    count(value.mastery) && typeof value.due === "string" && Number.isFinite(Date.parse(value.due));
+}
+
+function checkedMap<T>(value: unknown, check: (v: unknown) => v is T): Record<string, T> {
+  if (value === undefined) return {};
+  if (!record(value) || !Object.entries(value).every(([key, item]) =>
+    !["constructor", "__proto__", "prototype"].includes(key) && check(item))) {
+    throw new Error("Файл містить пошкоджені записи прогресу.");
+  }
+  return value as Record<string, T>;
+}
+
+export function normalizeImportedState(value: unknown): ProgressState {
+  if (!record(value) || !Object.keys(initialState).some(key => Object.prototype.hasOwnProperty.call(value, key)) ||
+      (value.currentLessonId !== undefined && typeof value.currentLessonId !== "string") ||
+      (value.completedLessons !== undefined && !strings(value.completedLessons))) {
     throw new Error("Файл не схожий на експорт прогресу цього курсу.");
   }
-  const candidate = value as Partial<ProgressState>;
   return {
-    currentLessonId: typeof candidate.currentLessonId === "string" ? candidate.currentLessonId : initialState.currentLessonId,
-    completedLessons: Array.isArray(candidate.completedLessons) ? candidate.completedLessons.filter((item): item is string => typeof item === "string") : [],
-    completedSections: candidate.completedSections && typeof candidate.completedSections === "object" ? candidate.completedSections as ProgressState["completedSections"] : {},
-    taskResults: candidate.taskResults && typeof candidate.taskResults === "object" ? candidate.taskResults as ProgressState["taskResults"] : {},
-    reviewStats: candidate.reviewStats && typeof candidate.reviewStats === "object" ? candidate.reviewStats as ProgressState["reviewStats"] : {}
+    currentLessonId: typeof value.currentLessonId === "string" ? value.currentLessonId : initialState.currentLessonId,
+    completedLessons: [...new Set(value.completedLessons ?? [])],
+    completedSections: checkedMap(value.completedSections, strings),
+    taskResults: checkedMap(value.taskResults, (v): v is boolean => typeof v === "boolean"),
+    reviewStats: checkedMap(value.reviewStats, review)
   };
+}
+
+export function nextReview(previous: Review | undefined, result: "again" | "hard" | "good" | "easy", now: number): Review {
+  const ok = result === "good" || result === "easy";
+  const mastery = ok ? Math.min(6, (previous?.mastery ?? 0) + (result === "easy" ? 2 : 1)) : 0;
+  const minutes = ok ? [0, 1, 3, 7, 14, 30, 60][mastery] * 1440 : result === "again" ? 10 : 60;
+  return { mastery, due: new Date(now + minutes * 60000).toISOString(),
+    correct: (previous?.correct ?? 0) + Number(ok), wrong: (previous?.wrong ?? 0) + Number(!ok) };
 }
 
 export function useProgress() {
   const [state, setState] = useState<ProgressState>(() => loadState());
+  const [storageError, setStorageError] = useState(false);
   const save = useCallback((next: ProgressState) => {
     setState(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      setStorageError(false);
+    } catch {
+      setStorageError(true);
+    }
   }, []);
 
   const markSection = useCallback((lessonId: string, sectionId: string) => {
@@ -62,6 +105,11 @@ export function useProgress() {
 
   const answerTask = useCallback((taskId: string, ok: boolean) => {
     save({ ...state, taskResults: { ...state.taskResults, [taskId]: ok } });
+  }, [save, state]);
+
+  const gradeCard = useCallback((id: string, result: "again" | "hard" | "good" | "easy") => {
+    save({ ...state, taskResults: { ...state.taskResults, [`flashcard-${id}`]: result === "good" || result === "easy" },
+      reviewStats: { ...state.reviewStats, [id]: nextReview(state.reviewStats[id], result, Date.now()) } });
   }, [save, state]);
 
   const exportProgress = useCallback(() => {
@@ -90,5 +138,5 @@ export function useProgress() {
     reader.readAsText(file);
   }), [save]);
 
-  return useMemo(() => ({ state, markSection, completeLesson, answerTask, exportProgress, importProgress, reset }), [answerTask, completeLesson, exportProgress, importProgress, markSection, reset, state]);
+  return useMemo(() => ({ state, gradeCard, storageError, markSection, completeLesson, answerTask, exportProgress, importProgress, reset }), [gradeCard, storageError, answerTask, completeLesson, exportProgress, importProgress, markSection, reset, state]);
 }
