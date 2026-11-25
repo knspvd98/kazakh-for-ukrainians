@@ -24,6 +24,14 @@ An interactive Kazakh language course designed for Ukrainian-speaking learners. 
 | Exercises | 1,082 reviewed interactive tasks |
 | Audio | More than 1,500 unique Kazakh words and phrases in normal and slow versions |
 
+## Word workshop and offline study
+
+In **Майстерня**, change the noun, number and case to see how a word is formed. Six short questions explain why a suffix fits and record which skill to practise next. In lessons, returning to the course saves your place. Completing a lesson requires the marked reading sections and at least 80% correct across its required practice.
+
+![Word workshop showing a Kazakh noun with plural and location endings](docs/word-workshop.png)
+
+After the first online visit to the production build, lessons and the workshop can reopen offline. To download the audio library, select **Довідники → Аудіо / Дыбыс → Зберегти аудіо** while online. Interrupted downloads resume at the last completed pack. Export progress from **Прогрес** before clearing browser data or switching devices.
+
 ## Key features
 
 - A continuous lesson player that keeps explanations, examples, dialogues, and practice in one learning flow.
@@ -32,7 +40,7 @@ An interactive Kazakh language course designed for Ukrainian-speaking learners. 
 - Exercises for recognition, sentence building, error correction, listening, and dialogue completion.
 - Dedicated grammar, ending-table, vocabulary, and phrasebook references.
 - Flashcard modes for reviewing completed material and studying vocabulary independently.
-- Local progress, difficult-word tracking, and exercise results stored in `localStorage`.
+- Local progress, difficult-word tracking, and exercise results stored in the browser.
 - Pre-generated offline audio with no browser speech synthesis.
 - Responsive desktop and mobile layouts.
 - Built-in course data quality reporting.
@@ -101,7 +109,7 @@ npm run audio:generate
 npm run audio:check
 ```
 
-The primary voice is `kk-KZ-AigulNeural`. The optional Node endpoint supports Edge TTS with file caching and SpeechGen as a fallback provider. Configuration examples are documented in `.env.example`; secrets are never included in the frontend or committed to Git.
+The primary voice is `kk-KZ-AigulNeural`. Set `COURSE_ENABLE_TTS=true` to enable local synthesis. The optional Node endpoint supports Edge TTS with file caching and SpeechGen as a fallback provider. Configuration examples are documented in `.env.example`; secrets are never included in the frontend or committed to Git.
 
 ## Quality assurance
 
@@ -138,7 +146,7 @@ BASE_PATH=/your-path/ npm run build
 
 ## Progress and privacy
 
-Learning progress is stored only in the learner's browser through `localStorage`. The application does not send lesson results to an external server.
+Learning progress is stored only in the learner's browser using local storage and an IndexedDB backup. The application does not send lesson results to an external server.
 
 ## Contributing
 

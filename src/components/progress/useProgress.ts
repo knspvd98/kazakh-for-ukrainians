@@ -1,4 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+import { loadArchive, saveArchive } from "./archive";
 
 const STORAGE_KEY = "kazakh_ukrainian_react_course_progress_v1";
 
@@ -81,14 +83,33 @@ export function nextReview(previous: Review | undefined, result: "again" | "hard
 export function useProgress() {
   const [state, setState] = useState<ProgressState>(() => loadState());
   const [storageError, setStorageError] = useState(false);
+  const edits = useRef(0);
+  useEffect(() => {
+    let active=true;
+    void loadArchive().then(value=>{
+      if (!active || edits.current || value===undefined) return;
+      if (!record(value) || typeof value.savedAt !== "number") return;
+      let localTime=0;
+      try {
+        const local=JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
+        if(local) { normalizeImportedState(local); localTime=Number(local.savedAt)||0; }
+      } catch { /* The backup can recover an unreadable local snapshot. */ }
+      if (value.savedAt>localTime) setState(normalizeImportedState(value.state));
+    }).catch(()=>{});
+    return ()=>{active=false;};
+  },[]);
   const save = useCallback((next: ProgressState) => {
+    const version=++edits.current;
+    const savedAt=Date.now();
+    let stored=false;
     setState(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({...next,savedAt}));
+      stored=true;
       setStorageError(false);
-    } catch {
-      setStorageError(true);
-    }
+    } catch { setStorageError(true); }
+    void saveArchive({state:next,savedAt}).then(()=>{if(edits.current===version)setStorageError(false);})
+      .catch(()=>{if(edits.current===version&&!stored)setStorageError(true);});
   }, []);
 
   const markSection = useCallback((lessonId: string, sectionId: string) => {

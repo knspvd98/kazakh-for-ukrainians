@@ -7,7 +7,7 @@ import { createTtsApiMiddleware } from "./ttsMiddleware.mjs";
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(rootDir, "dist");
 const port = Number(process.env.PORT || 4173);
-const host = process.env.HOST || "0.0.0.0";
+const host = process.env.HOST || "127.0.0.1";
 const publicBase = normalizePublicBase(process.env.BASE_PATH || "/kazakh-for-ukrainians/");
 const ttsMiddleware = createTtsApiMiddleware();
 
@@ -56,7 +56,7 @@ async function serveStatic(req, res) {
     const content = await fs.readFile(filePath);
     res.writeHead(200, {
       "Content-Type": mimeTypes[path.extname(filePath)] || "application/octet-stream",
-      "Cache-Control": filePath.endsWith("index.html") ? "no-cache" : "public, max-age=31536000, immutable"
+      "Cache-Control": ["index.html","sw.js","site.webmanifest"].includes(path.basename(filePath)) ? "no-cache" : "public, max-age=31536000, immutable"
     });
     res.end(content);
   } catch {

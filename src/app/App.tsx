@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppRoute } from "./routes";
+import { Workshop } from "../components/workshop/Workshop";
+import "./workshop.css";
 import { AppShell } from "../components/layout/AppShell";
 import { LessonPlayer } from "../components/lesson/LessonPlayer";
 import { GrammarPage } from "../components/reference/GrammarPage";
@@ -38,6 +40,7 @@ export function App() {
       {route.view === "tables" && <EndingTablesPage selectedId={route.tableId} />}
       {route.view === "vocabulary" && <VocabularyPage selectedId={route.wordId} setRoute={setRoute} />}
       {route.view === "phrases" && <PhrasebookPage category={route.phraseCategory} />}
+      {route.view === "workshop" && <Workshop progress={progress} />}
       {route.view === "practice" && <FlashcardsPage key={route.flashcardWordId ?? "practice"} progress={progress} selectedWordId={route.flashcardWordId} />}
       {route.view === "audio" && <AudioSettingsPage />}
       {route.view === "progress" && <ProgressPage progress={progress} />}
